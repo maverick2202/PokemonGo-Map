@@ -8,6 +8,8 @@ from peewee import Model, MySQLDatabase, SqliteDatabase, InsertQuery,\
                    IntegerField, CharField, DoubleField, BooleanField,\
                    DateTimeField, OperationalError
 from datetime import datetime, timedelta
+import smtplib
+import subprocess
 from base64 import b64encode
 
 from . import config
@@ -217,8 +219,40 @@ class ScannedLocation(BaseModel):
 
         return scans
 
+def send_email(pokemon_name, id, latitude,longitude):
+
+    msg = u'{} Id: {} @ {},{}'.format(pokemon_name,id,latitude,longitude)
+
+    # Send the message via our own SMTP server, but don't include the
+    # envelope header.
+    #s = smtplib.SMTP('localhost')
+    #s.starttls()
+    #s.login("maverick2202@yahoo.com","Ar@17623")
+    #s.sendmail("maverick2202@yahoo.com", "maverick2202@hotmail.com", msg)
+    #s.quit()
+
+
+    command = u"mail -s \"{} id:{} @ {},{} \" maverick2202@hotmail.com < /dev/null".format(pokemon_name,id,latitude,longitude)
+
+    log.info(u'Running: {}'.format(command))
+    os.system(command)
+    #process = subprocess.Popen(command,
+    #                           stdout=subprocess.PIPE,
+    #                           stderr=subprocess.STDOUT)
+    #out, _ = process.communicate()
+    #if not out:
+    #    out = '<empty>'
+
+    #log.info('STDOUT:\n' + out)
+    #if process.returncode != 0:
+    #    log.error('Command returned %d' % process.returncode)
+    #else:
+    #    log.info('Command returned %d' % process.returncode)
+
 
 def parse_map(map_dict, iteration_num, step, step_location):
+    rare_pokemon_ids = [1,2,3,4,5,6,7,29,30,31,32,33,34,35,36,43,44,45,58,60,61,62,66,67,68,69,70,71,72,73,79,80, 88, 92,93,94,89,129]
+    high_cp_pokemon_ids =  [59,103,130,131,134,136,142,143,144,145,146,149,150,151]
     pokemons = {}
     pokestops = {}
     gyms = {}
@@ -233,6 +267,19 @@ def parse_map(map_dict, iteration_num, step, step_location):
                      p['time_till_hidden_ms']) / 1000.0)
                 printPokemon(p['pokemon_data']['pokemon_id'], p['latitude'],
                              p['longitude'], d_t)
+                if (p['pokemon_data']['pokemon_id'] in rare_pokemon_ids) or \
+                    (p['pokemon_data']['pokemon_id'] in high_cp_pokemon_ids): 
+
+                pokemon_name = get_pokemon_name(p['pokemon_data']['pokemon_id'])
+
+                log.info(u"Pokemon: {} Id# {} ".format(pokemon_name, p['pokemon_data']['pokemon_id']))
+
+                #if (p['pokemon_data']['pokemon_id'] in high_cp_pokemon_ids): 
+                if p['pokemon_data']['pokemon_id'] in high_cp_pokemon_ids:
+                    send_email(pokemon_name, p['pokemon_data']['pokemon_id'],p['latitude'],p['longitude'])
+
+                printPokemon(p['pokemon_data']['pokemon_id'],p['latitude'],p['longitude'],d_t)
+
                 pokemons[p['encounter_id']] = {
                     'encounter_id': b64encode(str(p['encounter_id'])),
                     'spawnpoint_id': p['spawnpoint_id'],

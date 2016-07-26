@@ -21,13 +21,11 @@ def parse_unicode(bytestring):
     decoded_string = bytestring.decode(sys.getfilesystemencoding())
     return decoded_string
 
-
 def verify_config_file_exists(filename):
     fullpath = os.path.join(os.path.dirname(__file__), filename)
     if not os.path.exists(fullpath):
         log.info("Could not find " + filename + ", copying default")
         shutil.copy2(fullpath + '.example', fullpath)
-
 
 def get_args():
     # fuck PEP8
@@ -111,6 +109,7 @@ def get_args():
             parser.print_usage()
             print sys.argv[0] + ': error: arguments -l/--location is required'
             sys.exit(1)
+
     else:
         if (args.username is None or args.location is None or args.step_limit is None):
             parser.print_usage()

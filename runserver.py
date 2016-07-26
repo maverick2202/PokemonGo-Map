@@ -91,6 +91,7 @@ if __name__ == '__main__':
     config['GMAPS_KEY'] = args.gmaps_key
     config['REQ_SLEEP'] = args.scan_delay
 
+    log.info("Starting on Port {}".format(args.port))
     if args.no_server:
         # This loop allows for ctrl-c interupts to work since flask won't be holding the program open
         while search_thread.is_alive():
