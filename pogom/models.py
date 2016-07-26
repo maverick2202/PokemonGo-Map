@@ -107,9 +107,9 @@ class ScannedLocation(BaseModel):
 
         return scans
 
-def send_email(pokemon_name, id, latitude,longitude):
+def send_email(pokemon_name, id, latitude,longitude, expiry_time):
 
-    msg = u'{} Id: {} @ {},{}'.format(pokemon_name,id,latitude,longitude)
+    msg = u'{} Id: {} @ {},{} till {}'.format(pokemon_name,id,latitude,longitude, expiry_time)
 
     # Send the message via our own SMTP server, but don't include the
     # envelope header.
@@ -120,7 +120,7 @@ def send_email(pokemon_name, id, latitude,longitude):
     #s.quit()
 
 
-    command = u"mail -s \"{} id:{} @ {},{} \" maverick2202@hotmail.com < /dev/null".format(pokemon_name,id,latitude,longitude)
+    command = u"mail -s \"{}\" maverick2202@hotmail.com < /dev/null".format(msg)
 
     log.info(u'Running: {}'.format(command))
     os.system(command)
@@ -161,7 +161,7 @@ def parse_map(map_dict, iteration_num, step, step_location):
 
                 #if (p['pokemon_data']['pokemon_id'] in high_cp_pokemon_ids): 
                 if p['pokemon_data']['pokemon_id'] in high_cp_pokemon_ids:
-                    send_email(pokemon_name, p['pokemon_data']['pokemon_id'],p['latitude'],p['longitude'])
+                    send_email(pokemon_name, p['pokemon_data']['pokemon_id'],p['latitude'],p['longitude'], d_t)
 
                 printPokemon(p['pokemon_data']['pokemon_id'],p['latitude'],p['longitude'],d_t)
                 pokemons[p['encounter_id']] = {
