@@ -32,6 +32,7 @@ def parse_config(args):
         args.gmaps_key = Config.get('Misc', 'Google_Maps_API_Key') 
     args.host = Config.get('Misc', 'Host') 
     args.port = Config.get('Misc', 'Port') 
+    print "port {}".format(args.port)
     return args
 
 def get_args():
@@ -59,6 +60,8 @@ def get_args():
     parser.add_argument('-t', '--threads', help='Number of search threads', required=False, type=int, default=5, dest='num_threads')
     parser.set_defaults(DEBUG=False)
     args = parser.parse_args()
+
+    print 
 
     if (args.settings):
         args = parse_config(args) 

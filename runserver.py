@@ -75,6 +75,7 @@ if __name__ == '__main__':
     else:
         config['GMAPS_KEY'] = load_credentials(os.path.dirname(os.path.realpath(__file__)))['gmaps_key']
 
+    log.info("Starting on Port {}".format(args.port))
     if args.no_server:
         while not search_thread.isAlive():
             time.sleep(1)

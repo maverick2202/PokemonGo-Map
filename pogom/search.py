@@ -102,7 +102,7 @@ def login(args, position):
 def search_thread(args):
     i, total_steps, step_location, step, sem = args
 
-    log.info('Scanning step {:d} of {:d} started.'.format(step, total_steps))
+    log.debug('Scanning step {:d} of {:d} started.'.format(step, total_steps))
     log.debug('Scan location is {:f}, {:f}'.format(step_location[0], step_location[1]))
 
     response_dict = {}
