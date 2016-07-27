@@ -30,7 +30,7 @@ def init_database():
 
     if args.db_type == 'mysql':
         db = MySQLDatabase(
-            args.db_name,
+            str(args.port) +  args.db_name,
             user=args.db_user,
             password=args.db_pass,
             host=args.db_host)
@@ -232,7 +232,7 @@ def send_email(pokemon_name, id, latitude,longitude, expiry_time):
     #s.quit()
 
 
-    command = u"mail -s \"{}\" maverick2202@hotmail.com < /dev/null".format(msg)
+    command = u"echo http://maps.google.com/maps?q={},{} | mail -s \"{}\" maverick2202@hotmail.com ".format(latitude, longitude, msg)
 
     log.info(u'Running: {}'.format(command))
     os.system(command)
