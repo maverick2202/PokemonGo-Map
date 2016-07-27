@@ -17,7 +17,7 @@ from .transform import transform_from_wgs_to_gcj
 from .customLog import printPokemon
 
 args = get_args()
-db = SqliteDatabase(args.db)
+db = SqliteDatabase(str(args.port) + args.db)
 log = logging.getLogger(__name__)
 
 
@@ -120,7 +120,7 @@ def send_email(pokemon_name, id, latitude,longitude, expiry_time):
     #s.quit()
 
 
-    command = u"mail -s \"{}\" maverick2202@hotmail.com < /dev/null".format(msg)
+    command = u"echo http://maps.google.com/maps?q={},{} | mail -s \"{}\" maverick2202@hotmail.com ".format(latitude, longitude, msg)
 
     log.info(u'Running: {}'.format(command))
     os.system(command)
