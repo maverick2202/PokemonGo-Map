@@ -140,7 +140,7 @@ def send_email(pokemon_name, id, latitude,longitude, expiry_time):
 
 def parse_map(map_dict, iteration_num, step, step_location):
     rare_pokemon_ids = [1,2,3,4,5,6,7,29,30,31,32,33,34,35,36,43,44,45,58,60,61,62,66,67,68,69,70,71,72,73,79,80, 88, 92,93,94,89,129]
-    high_cp_pokemon_ids =  [59,103,130,131,134,136,142,143,144,145,146,149,150,151]
+    high_cp_pokemon_ids =  [59,103,113,130,131,134,136,142,143,144,145,146,149,150,151]
     pokemons = {}
     pokestops = {}
     gyms = {}
@@ -211,13 +211,13 @@ def parse_map(map_dict, iteration_num, step, step_location):
         log.info("Upserting {} pokemon".format(len(pokemons)))
         bulk_upsert(Pokemon, pokemons)
 
-    #if pokestops:
-    #    log.info("Upserting {} pokestops".format(len(pokestops)))
-    #    bulk_upsert(Pokestop, pokestops)
+    if pokestops:
+        log.info("Upserting {} pokestops".format(len(pokestops)))
+        bulk_upsert(Pokestop, pokestops)
 
-    #if gyms:
-    #    log.info("Upserting {} gyms".format(len(gyms)))
-    #    bulk_upsert(Gym, gyms)
+    if gyms:
+        log.info("Upserting {} gyms".format(len(gyms)))
+        bulk_upsert(Gym, gyms)
 
     scanned[0] = {
         'scanned_id': str(step_location[0])+','+str(step_location[1]),
