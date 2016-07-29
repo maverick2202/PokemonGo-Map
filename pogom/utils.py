@@ -109,7 +109,6 @@ def get_args():
             parser.print_usage()
             print sys.argv[0] + ': error: arguments -l/--location is required'
             sys.exit(1)
-
     else:
         if (args.username is None or args.location is None or args.step_limit is None):
             parser.print_usage()
