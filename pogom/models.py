@@ -30,7 +30,7 @@ def init_database():
 
     if args.db_type == 'mysql':
         db = MySQLDatabase(
-            str(args.port) +  args.db_name,
+            args.db_name,
             user=args.db_user,
             password=args.db_pass,
             host=args.db_host)
@@ -235,7 +235,7 @@ def send_email(pokemon_name, id, latitude,longitude, expiry_time):
     command = u"echo http://maps.google.com/maps?q={},{} | mail -s \"{}\" maverick2202@hotmail.com ".format(latitude, longitude, msg)
 
     log.info(u'Running: {}'.format(command))
-    os.system(command)
+    #os.system(command)
     #process = subprocess.Popen(command,
     #                           stdout=subprocess.PIPE,
     #                           stderr=subprocess.STDOUT)
@@ -267,14 +267,12 @@ def parse_map(map_dict, iteration_num, step, step_location):
                      p['time_till_hidden_ms']) / 1000.0)
                 printPokemon(p['pokemon_data']['pokemon_id'], p['latitude'],
                              p['longitude'], d_t)
+                pokemon_name=""
                 if (p['pokemon_data']['pokemon_id'] in rare_pokemon_ids) or \
                     (p['pokemon_data']['pokemon_id'] in high_cp_pokemon_ids): 
-
-                pokemon_name = get_pokemon_name(p['pokemon_data']['pokemon_id'])
-
-                log.info(u"Pokemon: {} Id# {} ".format(pokemon_name, p['pokemon_data']['pokemon_id']))
-
-                #if (p['pokemon_data']['pokemon_id'] in high_cp_pokemon_ids): 
+                    pokemon_name = get_pokemon_name(p['pokemon_data']['pokemon_id'])
+                    log.info(u"Pokemon: {} Id# {} ".format(pokemon_name, p['pokemon_data']['pokemon_id']))
+ 
                 if p['pokemon_data']['pokemon_id'] in high_cp_pokemon_ids:
                     send_email(pokemon_name, p['pokemon_data']['pokemon_id'],p['latitude'],p['longitude'], d_t)
 
